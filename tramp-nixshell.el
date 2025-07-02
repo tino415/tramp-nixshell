@@ -3,29 +3,21 @@
 
 
 (defvar tramp-nixshell-file-alist '())
-(defvar tramp-nixshell-file-dir "~/.shells")
+(defvar tramp-nixshell-file-dir nil)
 
-(setq tramp-nixshell-file-alist '((elixir2 . "~/.shells/elixir.nix")))
+(setq tramp-nixshell-file-alist '())
 
-(add-to-list 'tramp-methods
-             '("nixshell"
-               (tramp-remote-shell "/bin/sh")
-               (tramp-remote-shell-args ("-c"))))
+(defconst tramp-nixshell-remote-params
+  '((tramp-remote-shell "/bin/sh")
+    (tramp-remote-shell-args ("-c"))))
 
-(add-to-list 'tramp-methods
-             '("nixshellp"
-               (tramp-remote-shell         "/bin/sh")
-               (tramp-remote-shell-args    ("-c"))))
+(add-to-list 'tramp-methods `("nixshell" ,tramp-nixshell-remote-params))
 
-(add-to-list 'tramp-methods
-             '("nixshellfb"
-               (tramp-remote-shell         "/bin/sh")
-               (tramp-remote-shell-args    ("-c"))))
+(add-to-list 'tramp-methods `("nixshellp" ,tramp-nixshell-remote-params))
 
-(add-to-list 'tramp-methods
-             '("nixshellfa"
-               (tramp-remote-shell         "/bin/sh")
-               (tramp-remote-shell-args    ("-c"))))
+(add-to-list 'tramp-methods `("nixshellfb" ,tramp-nixshell-remote-params))
+
+(add-to-list 'tramp-methods '("nixshellfa" ,tramp-nixshell-remote-params))
 
 (defun tramp-nixshell--method-parameter-advice (orig-fun vec param)
   (let ((method (tramp-file-name-method vec))
@@ -57,10 +49,11 @@
     (seq-map (lambda (p) (car p))
              tramp-nixshell-file-alist)
     (seq-map (lambda (p) (file-name-sans-extension p))
-             (directory-files
-              tramp-nixshell-file-dir
-              nil
-              "\\.nix")))))
+             (if tramp-nixshell-file-dir
+                 (directory-files
+                  tramp-nixshell-file-dir
+                  nil
+                  "\\.nix"))))))
 
 (transient-define-prefix tramp-nixshell ()
   :incompatible '(("--packages=" "--file=" "--alias="))

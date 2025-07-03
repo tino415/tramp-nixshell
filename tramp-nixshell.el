@@ -1,3 +1,29 @@
+;;; tramp-nixshell.el --- Use nix-shell via TRAMP  -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2025 Martin Černák
+
+;; Author: Martin Černák <cernakmartin3@gmail.com>
+;; Version: 0.1.0
+;; Package-Requires: ((emacs "26.1") (base32 "0.1") (transient "0.4"))
+;; Keywords: convenience, tools
+;; URL: https://github.com/tino415/tramp-nixshell
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+;;
+;; This package provides methods for TRAMP to connect to nix-shell environments.
+;; It supports:
+;; - Plain nix-shell (/nixshell::)
+;; - Package-based nix-shell (/nixshellp:PACKAGES@:)
+;; - File-based nix-shell (/nixshellfb:ENCODED-FILE@:)
+;; - Aliased nix-shell files (/nixshellfa:ALIAS@:)
+;;
+;; Usage:
+;;   M-x tramp-nixshell
+;;
+;;; Code:
+
 (require 'tramp)
 (require 'base32)
 
@@ -87,3 +113,4 @@
    (t "/nixshell::")))
 
 (provide 'tramp-nixshell)
+;;; tramp-nixshell.el ends here

@@ -34,17 +34,20 @@
 
 (setq tramp-nixshell-file-alist '())
 
-(defconst tramp-nixshell-remote-params
-  '((tramp-remote-shell "/bin/sh")
+(defun tramp-nixshell-remote-params (name)
+  `(,name
+    (tramp-login-program "nix-shell")
+    (tramp-login-args ())
+    (tramp-remote-shell "/bin/sh")
     (tramp-remote-shell-args ("-c"))))
 
-(add-to-list 'tramp-methods `("nixshell" ,tramp-nixshell-remote-params))
+(add-to-list 'tramp-methods (tramp-nixshell-remote-params "nixshell"))
 
-(add-to-list 'tramp-methods `("nixshellp" ,tramp-nixshell-remote-params))
+(add-to-list 'tramp-methods (tramp-nixshell-remote-params "nixshellp"))
 
-(add-to-list 'tramp-methods `("nixshellfb" ,tramp-nixshell-remote-params))
+(add-to-list 'tramp-methods (tramp-nixshell-remote-params "nixshellfb"))
 
-(add-to-list 'tramp-methods `("nixshellfa" ,tramp-nixshell-remote-params))
+(add-to-list 'tramp-methods (tramp-nixshell-remote-params "nixshellfa"))
 
 (defun tramp-nixshell--method-parameter-advice (orig-fun vec param)
   (let ((method (tramp-file-name-method vec))

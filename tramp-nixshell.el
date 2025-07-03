@@ -35,7 +35,7 @@
         (let ((path (concat tramp-nixshell-file-dir "/" user ".nix")))
           (if (file-exists-p path)
               (list (list path))
-            (error "Unknown alias %s : (%s)" alias path)))))
+            (error "Unknown alias %s : (%s)" (intern user) path)))))
      (t
       (funcall orig-fun vec param)))))
 

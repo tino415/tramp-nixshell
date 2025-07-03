@@ -17,7 +17,7 @@
 
 (add-to-list 'tramp-methods `("nixshellfb" ,tramp-nixshell-remote-params))
 
-(add-to-list 'tramp-methods '("nixshellfa" ,tramp-nixshell-remote-params))
+(add-to-list 'tramp-methods `("nixshellfa" ,tramp-nixshell-remote-params))
 
 (defun tramp-nixshell--method-parameter-advice (orig-fun vec param)
   (let ((method (tramp-file-name-method vec))
@@ -66,17 +66,24 @@
       (tramp-nixshell--alias-completing-read prompt)))]
   ["Run"
    ("c" "Reopen current file/change directory"
-    tramp-reopen-current-file-change-directory)])
+    tramp-nixshell-reopen-current-file-change-directory)])
 
-(defun tramp-reopen-current-file-change-directory (args)
+(defun tramp-nixshell-reopen-current-file-change-directory (args)
   (interactive (list (transient-args 'tramp-nixshell)))
   (let ((method
-         (tramp-nixshell-format-method
+         (tramp-nixshell--format-method
           (transient-arg-value "--packages=" args)
           (transient-arg-value "--file=" args)
           (transient-arg-value "--alias=" args))))
     (if-let ((fpath (buffer-file-name (current-buffer))))
         (find-file (concat method fpath))
       (cd (concat method default-directory)))))
+
+(defun tramp-nixshell--format-method (packages file alias)
+  (cond
+   (packages (concat "/nishellp:" packages "@:"))
+   (file (concat "/nixshellfb:" (base32-encode file) "@:"))
+   (alias (concat "/nixshellfa:" alias "@:"))
+   (t "/nixshell::")))
 
 (provide 'tramp-nixshell)

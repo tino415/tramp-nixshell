@@ -4,7 +4,7 @@
 
 ;; Author: Martin Černák <cernakmartin3@gmail.com>
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "26.1") (base32 "0.1") (transient "0.4"))
+;; Package-Requires: ((emacs "29.1") (base32 "0.1"))
 ;; Keywords: convenience, tools
 ;; URL: https://github.com/tino415/tramp-nixshell
 
@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'tramp)
+(require 'transient)
 (require 'base32)
 
 

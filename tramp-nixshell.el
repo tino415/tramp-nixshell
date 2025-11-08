@@ -49,7 +49,8 @@
 
 (add-to-list 'tramp-methods (tramp-nixshell-remote-params "nixshellfa"))
 
-(defun tramp-nixshell--method-parameter-advice (orig-fun vec param)
+; rest ignore because never tramp is sometimes passign some number
+(defun tramp-nixshell--method-parameter-advice (orig-fun vec param &rest _ignore)
   (let ((method (tramp-file-name-method vec))
         (user (tramp-file-name-user vec)))
     (cond
